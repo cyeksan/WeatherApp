@@ -12,4 +12,7 @@ interface WeatherService {
     fun getWeatherData(@Path("version") version: String,
                        @Query("q") city: String,
                        @Query("appid") appId: String) : Call<WeatherResponse>
+
+
+
 }
