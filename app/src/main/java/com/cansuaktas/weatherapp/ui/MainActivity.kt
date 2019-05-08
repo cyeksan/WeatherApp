@@ -27,6 +27,7 @@ import com.cansuaktas.weatherapp.enums.WeatherType
 import com.cansuaktas.weatherapp.network.WeatherService
 import com.cansuaktas.weatherapp.response.WeatherResponse
 import com.cansuaktas.weatherapp.ui.GetLocation
+import com.cansuaktas.weatherapp.ui.IGetLocation
 import com.cansuaktas.weatherapp.ui.IRetrofitConnection
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
@@ -37,7 +38,7 @@ import java.io.IOException
 import java.text.DecimalFormat
 import java.util.*
 
-class MainActivity : AppCompatActivity(), IRetrofitConnection {
+class MainActivity : AppCompatActivity(), IRetrofitConnection, IGetLocation {
 
     private val weatherList = ArrayList<WeatherModel>()
     private lateinit var locationManager: LocationManager
@@ -78,10 +79,6 @@ class MainActivity : AppCompatActivity(), IRetrofitConnection {
             getLocation()
 
         }
-
-        txt_city.text = getCity(latitude!!, longitude!!)
-
-        RetrofitConnection(getCity(latitude!!, longitude!!), this)
 
         }
 
@@ -124,12 +121,12 @@ class MainActivity : AppCompatActivity(), IRetrofitConnection {
         when (weatherType) {
 
             WeatherType.CLOUDS.toString() -> {
-                img_background.setImageResource(R.drawable.clouds)
+                img_background.setImageResource(R.drawable.clear)
                 img_weather.setImageResource(R.drawable.ic_cloud)
             }
 
             WeatherType.RAIN.toString() -> {
-                img_background.setImageResource(R.drawable.rain)
+                img_background.setImageResource(R.drawable.clear)
                 img_weather.setImageResource(R.drawable.ic_rain)
             }
 
@@ -137,6 +134,9 @@ class MainActivity : AppCompatActivity(), IRetrofitConnection {
 
                 img_background.setImageResource(R.drawable.clear)
                 img_weather.setImageResource(R.drawable.ic_sun)
+
+                txt_weather.setTextColor(ContextCompat.getColor(this, R.color.iconColor))
+                txt_weather_desc.setTextColor(ContextCompat.getColor(this, R.color.iconColor))
             }
 
             else -> {
@@ -187,7 +187,7 @@ class MainActivity : AppCompatActivity(), IRetrofitConnection {
 
     private fun getLocation() {
 
-       GetLocation(this)
+       GetLocation(this, this)
     }
 
     private fun checkPermission(permissionArray: Array<String>): Boolean {
@@ -246,6 +246,15 @@ class MainActivity : AppCompatActivity(), IRetrofitConnection {
         txt_weather.text = responseModel.list[2].main.temp.toCelsius().formatDouble().addDegreeSign()
 
         setBackgroundImage(responseModel.list[2].weather[0].main)
+    }
+
+    override fun getLongitudeAndLatitude(latitude: Double?, longitude: Double?) {
+
+        txt_city.text = getCity(latitude!!, longitude!!)
+
+        RetrofitConnection(getCity(latitude, longitude), this)
+
+
     }
 
 }
