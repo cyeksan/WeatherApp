@@ -13,7 +13,8 @@ import android.provider.Settings
 
 class GetLocation(
 
-    private val context: Context
+    private val context: Context,
+    private val iGetLocation: IGetLocation
 ) {
 
     private lateinit var locationManager: LocationManager
@@ -135,5 +136,7 @@ class GetLocation(
             context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
 
         }
+
+        iGetLocation.getLongitudeAndLatitude(latitude, longitude)
     }
 }
