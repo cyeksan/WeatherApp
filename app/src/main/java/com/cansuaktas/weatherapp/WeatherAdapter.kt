@@ -1,7 +1,7 @@
 package com.cansuaktas.weatherapp
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,8 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 
-class WeatherAdapter(val weatherList: ArrayList<WeatherModel>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): RecyclerView.ViewHolder {
+class WeatherAdapter(val weatherList: ArrayList<WeatherModel>) : androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
+    override fun onCreateViewHolder(p0: ViewGroup, p1: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {
 
         val itemView =
             LayoutInflater.from(p0.context).inflate(R.layout.recycler_view_weather_item, p0, false)
@@ -20,12 +20,12 @@ class WeatherAdapter(val weatherList: ArrayList<WeatherModel>) : RecyclerView.Ad
 
     override fun getItemCount(): Int = weatherList.size
 
-    override fun onBindViewHolder(p0: RecyclerView.ViewHolder, p1: Int) {
+    override fun onBindViewHolder(p0: androidx.recyclerview.widget.RecyclerView.ViewHolder, p1: Int) {
         val viewHolder = ViewHolder(p0.itemView)
         viewHolder.bindTo(p1)
     }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
 
         private val context: Context = itemView.context
         private val tvTime: TextView = itemView.findViewById(R.id.txt_time)

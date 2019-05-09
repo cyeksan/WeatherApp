@@ -2,9 +2,9 @@ package com.cansuaktas.weatherapp
 
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.annotation.SuppressLint
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,11 +12,11 @@ import android.location.*
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.Window
 import android.view.WindowManager
@@ -27,6 +27,7 @@ import com.cansuaktas.weatherapp.enums.WeatherType
 import com.cansuaktas.weatherapp.network.WeatherService
 import com.cansuaktas.weatherapp.response.WeatherResponse
 import com.cansuaktas.weatherapp.ui.GetLocation
+import com.cansuaktas.weatherapp.ui.IGetLocation
 import com.cansuaktas.weatherapp.ui.IRetrofitConnection
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
@@ -37,7 +38,7 @@ import java.io.IOException
 import java.text.DecimalFormat
 import java.util.*
 
-class MainActivity : AppCompatActivity(), IRetrofitConnection {
+class MainActivity : AppCompatActivity(), IRetrofitConnection, IGetLocation {
 
     private val weatherList = ArrayList<WeatherModel>()
     private lateinit var locationManager: LocationManager
@@ -78,10 +79,6 @@ class MainActivity : AppCompatActivity(), IRetrofitConnection {
             getLocation()
 
         }
-
-        txt_city.text = getCity(latitude!!, longitude!!)
-
-        RetrofitConnection(getCity(latitude!!, longitude!!), this)
 
         }
 
@@ -137,6 +134,9 @@ class MainActivity : AppCompatActivity(), IRetrofitConnection {
 
                 img_background.setImageResource(R.drawable.clear)
                 img_weather.setImageResource(R.drawable.ic_sun)
+
+                txt_weather.setTextColor(ContextCompat.getColor(this, R.color.iconColor))
+                txt_weather_desc.setTextColor(ContextCompat.getColor(this, R.color.iconColor))
             }
 
             else -> {
@@ -187,7 +187,7 @@ class MainActivity : AppCompatActivity(), IRetrofitConnection {
 
     private fun getLocation() {
 
-       GetLocation(this)
+       GetLocation(this, this)
     }
 
     private fun checkPermission(permissionArray: Array<String>): Boolean {
@@ -238,7 +238,11 @@ class MainActivity : AppCompatActivity(), IRetrofitConnection {
 
 
         }
-        recyclerView.layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.VERTICAL, false)
+        recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(
+            this@MainActivity,
+            androidx.recyclerview.widget.RecyclerView.VERTICAL,
+            false
+        )
         recyclerView.adapter = WeatherAdapter(weatherList)
 
         txt_weather_desc.text = responseModel.list[2].weather[0].main
@@ -246,6 +250,15 @@ class MainActivity : AppCompatActivity(), IRetrofitConnection {
         txt_weather.text = responseModel.list[2].main.temp.toCelsius().formatDouble().addDegreeSign()
 
         setBackgroundImage(responseModel.list[2].weather[0].main)
+    }
+
+    override fun getLongitudeAndLatitude(latitude: Double?, longitude: Double?) {
+
+        txt_city.text = getCity(latitude!!, longitude!!)
+
+        RetrofitConnection(getCity(latitude, longitude), this)
+
+
     }
 
 }
