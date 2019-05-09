@@ -1,8 +1,7 @@
-package com.cansuaktas.weatherapp.ui
+package com.cansuaktas.weatherapp.ui.main.presenter
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Context.LOCATION_SERVICE
 import android.content.Intent
 import android.location.Location
 import android.location.LocationListener
@@ -29,6 +28,7 @@ class GetLocation(
 
         getLocation()
     }
+
     @SuppressLint("MissingPermission")
     fun getLocation() {
 

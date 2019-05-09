@@ -1,53 +1,40 @@
-package com.cansuaktas.weatherapp
+package com.cansuaktas.weatherapp.ui.main.view
 
-import android.Manifest.permission.ACCESS_FINE_LOCATION
-import android.annotation.SuppressLint
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.*
+import android.location.Address
+import android.location.Geocoder
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import android.util.Log
+import android.os.Parcelable
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.Toast
-
+import androidx.core.content.ContextCompat
+import com.cansuaktas.weatherapp.R
+import com.cansuaktas.weatherapp.adapter.WeatherAdapter
+import com.cansuaktas.weatherapp.enums.IntentParameters
 import com.cansuaktas.weatherapp.enums.WeatherType
-import com.cansuaktas.weatherapp.network.WeatherService
-import com.cansuaktas.weatherapp.response.WeatherResponse
-import com.cansuaktas.weatherapp.ui.GetLocation
-import com.cansuaktas.weatherapp.ui.IGetLocation
-import com.cansuaktas.weatherapp.ui.IRetrofitConnection
+import com.cansuaktas.weatherapp.helper.SlideHalfScreen
+import com.cansuaktas.weatherapp.model.WeatherModel
+import com.cansuaktas.weatherapp.ui.detail.view.DetailActivity
+import com.cansuaktas.weatherapp.ui.main.model.response.WeatherResponse
+import com.cansuaktas.weatherapp.ui.main.presenter.GetLocation
+import com.cansuaktas.weatherapp.ui.main.presenter.IGetLocation
+import com.cansuaktas.weatherapp.ui.main.presenter.IRetrofitConnection
+import com.cansuaktas.weatherapp.ui.main.presenter.RetrofitConnection
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.IOException
-
 import java.text.DecimalFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
-class MainActivity : AppCompatActivity(), IRetrofitConnection, IGetLocation {
+class MainActivity : SlideHalfScreen(), IRetrofitConnection, IGetLocation {
 
-    private val weatherList = ArrayList<WeatherModel>()
-    private lateinit var locationManager: LocationManager
-    private var hasGps = false
-    private var hasNetwork = false
-    private var locationGps: Location? = null
-    private var locationNetwork: Location? = null
-    private var latitude: Double? = null
-    private var longitude: Double? = null
+    private var cityName: String? = null
+    private val list = ArrayList<WeatherModel>()
+    private val weatherList: MutableList<WeatherModel> = ArrayList()
     private val PERMISSION_REQUEST_CODE = 1000
     private val permissions =
         arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -62,8 +49,24 @@ class MainActivity : AppCompatActivity(), IRetrofitConnection, IGetLocation {
             WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
         )
 
-
         setContentView(R.layout.activity_main)
+
+        checkPermissionGrantedAndGetLocation()
+
+        fab.setOnClickListener {
+            slideToHalf(motionLayout)
+            val intent = Intent(this@MainActivity, DetailActivity::class.java)
+            intent.putExtra(IntentParameters.CITY_NAME.toString(), cityName)
+            intent.putParcelableArrayListExtra(
+                IntentParameters.WEATHER_LIST.toString(),
+                weatherList as java.util.ArrayList<out Parcelable>
+            )
+            startActivity(intent)
+        }
+
+    }
+
+    private fun checkPermissionGrantedAndGetLocation() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
@@ -80,19 +83,19 @@ class MainActivity : AppCompatActivity(), IRetrofitConnection, IGetLocation {
 
         }
 
-        }
+    }
 
-    fun String.getWeatherIcon(): String {
+    private fun String.getWeatherIcon(): String {
 
         return "http://openweathermap.org/img/w/${this}.png"
     }
 
-    fun Double.toCelsius(): Double {
+    private fun Double.toCelsius(): Double {
 
         return this - 273.15
     }
 
-    fun Double.formatDouble(): String {
+    private fun Double.formatDouble(): String {
 
         return if (this >= 10.0) {
 
@@ -103,7 +106,7 @@ class MainActivity : AppCompatActivity(), IRetrofitConnection, IGetLocation {
         }
     }
 
-    fun String.setAmPm(): String {
+    private fun String.setAmPm(): String {
 
         val hour: Int = this.substring(0, 2).toInt()
 
@@ -116,7 +119,7 @@ class MainActivity : AppCompatActivity(), IRetrofitConnection, IGetLocation {
         }
     }
 
-    fun setBackgroundImage(weatherType: String) {
+    private fun setBackgroundImage(weatherType: String) {
 
         when (weatherType) {
 
@@ -150,14 +153,13 @@ class MainActivity : AppCompatActivity(), IRetrofitConnection, IGetLocation {
 
     }
 
-    fun String.addDegreeSign(): String {
+    private fun String.addDegreeSign(): String {
 
         return "$this°"
     }
 
-    fun getCity(lat: Double, lng: Double): String {
+    private fun getCity(lat: Double, lng: Double): String {
 
-        var cityName: String? = null
         val geocoder = Geocoder(this, Locale.getDefault())
         val addresses: List<Address>
 
@@ -171,6 +173,7 @@ class MainActivity : AppCompatActivity(), IRetrofitConnection, IGetLocation {
                     if (adr.locality != null && adr.locality.isNotEmpty()) {
 
                         cityName = adr.locality
+
 
                         break
                     }
@@ -187,7 +190,7 @@ class MainActivity : AppCompatActivity(), IRetrofitConnection, IGetLocation {
 
     private fun getLocation() {
 
-       GetLocation(this, this)
+        GetLocation(this, this)
     }
 
     private fun checkPermission(permissionArray: Array<String>): Boolean {
@@ -212,9 +215,9 @@ class MainActivity : AppCompatActivity(), IRetrofitConnection, IGetLocation {
                             permissions[i]
                         )
                     if (requestAgain) {
-                        Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(this, "Go to settings and enable the permission", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, getString(R.string.go_to_settings), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -226,27 +229,19 @@ class MainActivity : AppCompatActivity(), IRetrofitConnection, IGetLocation {
     }
 
     override fun weatherRequest(responseModel: WeatherResponse) {
-        for (i in 0 until 3) {
-
-            weatherList.add(WeatherModel().apply {
-
-                time = responseModel.list[i].dtTxt.substring(11, 16).setAmPm()
-                degree = responseModel.list[i].main.temp.toCelsius().formatDouble()
-                weatherUrl = responseModel.list[i].weather[0].icon.getWeatherIcon()
-
-            })
 
 
-        }
+        createList(weatherList, responseModel, 2, 27)
+        createList(list, responseModel, 2, 5)
+
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(
             this@MainActivity,
             androidx.recyclerview.widget.RecyclerView.VERTICAL,
             false
         )
-        recyclerView.adapter = WeatherAdapter(weatherList)
+        recyclerView.adapter = WeatherAdapter(list, false)
 
         txt_weather_desc.text = responseModel.list[2].weather[0].main
-
         txt_weather.text = responseModel.list[2].main.temp.toCelsius().formatDouble().addDegreeSign()
 
         setBackgroundImage(responseModel.list[2].weather[0].main)
@@ -258,6 +253,27 @@ class MainActivity : AppCompatActivity(), IRetrofitConnection, IGetLocation {
 
         RetrofitConnection(getCity(latitude, longitude), this)
 
+    }
+
+    private fun createList(
+        mList: MutableList<WeatherModel>,
+        responseModel: WeatherResponse,
+        startIndex: Int,
+        endIndex: Int
+    ) {
+
+        for (i in startIndex until endIndex) {
+
+            mList.add(WeatherModel().apply {
+
+                time = responseModel.list[i].dtTxt.substring(11, 16).setAmPm()
+                degree = responseModel.list[i].main.temp.toCelsius().formatDouble()
+                weatherUrl = responseModel.list[i].weather[0].icon.getWeatherIcon()
+                today = responseModel.list[i].dtTxt.substring(0, 10)
+
+            })
+
+        }
 
     }
 

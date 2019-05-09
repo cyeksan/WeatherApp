@@ -1,4 +1,4 @@
-package com.cansuaktas.weatherapp.dto
+package com.cansuaktas.weatherapp.ui.main.model.dto
 
 data class CityDTO(
 

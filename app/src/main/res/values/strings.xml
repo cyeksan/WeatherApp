@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">WeatherApp</string>
+    <string name="permission_denied">Permission denied</string>
+    <string name="go_to_settings">Go to settings and enable the permission</string>
+    <string name="weather_degree">26°</string>
+    <string name="clouds">Clouds</string>
+    <string name="istanbul">Istanbul</string>
 </resources>

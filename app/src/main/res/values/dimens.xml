@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fab_size">64dp</dimen>
+    <dimen name="elevation_size">10dp</dimen>
+    <dimen name="top_margin">24dp</dimen>
+    <dimen name="recycler_view_padding">36dp</dimen>
+    <dimen name="weather_main_icon_size">148dp</dimen>
+    <dimen name="weather_degree_size">64sp</dimen>
+    <dimen name="weather_degree_margin">24dp</dimen>
+    <dimen name="weather_desc_size">40sp</dimen>
+    <dimen name="weather_desc_margin">8dp</dimen>
+    <dimen name="location_name_margin">8dp</dimen>
+    <dimen name="location_name_size">18sp</dimen>
+    <dimen name="location_icon_size">24dp</dimen>
+    <dimen name="location_icon_left_right_margin">16dp</dimen>
+    <dimen name="location_icon_top_margin">36dp</dimen>
+    <dimen name="location_icon_bottom_margin">8dp</dimen>
+</resources>

@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="iconColor">#000000</color>
+    <color name="fabColor">#2196F3</color>
+    <color name="mainScreenHalfBottom">#ccffffff</color>
 </resources>

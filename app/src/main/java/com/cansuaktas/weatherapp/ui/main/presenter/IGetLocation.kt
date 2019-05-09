@@ -1,4 +1,4 @@
-package com.cansuaktas.weatherapp.ui
+package com.cansuaktas.weatherapp.ui.main.presenter
 
 interface IGetLocation {
 

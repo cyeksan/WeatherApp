@@ -1,5 +1,6 @@
-package com.cansuaktas.weatherapp
+package com.cansuaktas.weatherapp.client
 
+import com.cansuaktas.weatherapp.enums.UrlParameters
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -10,7 +11,7 @@ class RetrofitClient {
         fun getClient(): Retrofit {
 
             return Retrofit.Builder()
-                .baseUrl("https://api.openweathermap.org/")
+                .baseUrl(UrlParameters.BASE_URL.toString())
                 .addConverterFactory(GsonConverterFactory.create()).build()
         }
     }

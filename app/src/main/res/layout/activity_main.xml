@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
-                                                   xmlns:tools="http://schemas.android.com/tools"
-                                                   android:layout_width="match_parent"
-                                                   android:layout_height="match_parent"
-                                                   tools:context=".MainActivity"
-                                                   android:id="@+id/parent_layout">
+<androidx.constraintlayout.motion.widget.MotionLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutDescription="@xml/motion_scene"
+        android:id="@+id/motionLayout">
     <ImageView
             android:id="@+id/img_background"
             android:layout_width="match_parent" android:layout_height="match_parent"
@@ -14,73 +15,102 @@
             app:layout_constraintBottom_toBottomOf="@+id/recyclerView" app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintVertical_bias="0.0"/>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
+            android:clickable="true"
+            android:focusable="true"
+            android:id="@+id/fab"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/recyclerView"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:backgroundTint="@color/fabColor"
+            app:elevation="@dimen/elevation_size"
+            app:srcCompat="@drawable/ic_keyboard_arrow_up_white_24dp"
+            app:fabCustomSize="@dimen/fab_size"
+            app:layout_constraintBottom_toTopOf="@+id/recyclerView"/>
+
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:paddingTop="36dp"
-            android:paddingBottom="36dp"
-            android:background="#ccffffff">
+            android:paddingTop="@dimen/recycler_view_padding"
+            android:paddingBottom="@dimen/recycler_view_padding"
+            android:background="@color/mainScreenHalfBottom">
     </androidx.recyclerview.widget.RecyclerView>
 
 
-
     <ImageView
-            android:layout_width="148dp"
-            android:layout_height="148dp" tools:srcCompat="@tools:sample/avatars"
+            android:layout_width="@dimen/weather_main_icon_size"
+            android:layout_height="@dimen/weather_main_icon_size"
             android:id="@+id/img_weather"
             android:scaleType="fitCenter"
             app:layout_constraintTop_toTopOf="@+id/img_background"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/recyclerView"
-            app:layout_constraintVertical_bias="0.502" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.16" android:layout_marginBottom="8dp"/>
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.15"/>
     <TextView
-            android:text="26°"
+            tools:text="@string/weather_degree"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txt_weather"
-            android:gravity="center" android:textSize="64sp"
-            android:fontFamily="sans-serif-light"
+            android:gravity="center"
+            android:textSize="@dimen/weather_degree_size"
+            app:fontFamily="sans-serif-light"
             app:layout_constraintStart_toEndOf="@+id/img_weather"
-            android:layout_marginStart="24dp" android:layout_marginLeft="24dp"
+            android:layout_marginStart="@dimen/weather_degree_margin"
+            android:layout_marginLeft="@dimen/weather_degree_margin"
+            android:layout_marginEnd="@dimen/weather_degree_margin"
+            android:layout_marginRight="@dimen/weather_degree_margin"
             app:layout_constraintTop_toTopOf="@+id/img_weather" android:textColor="@android:color/white"/>
     <TextView
-            android:text="Clear"
+            tools:text="@string/clouds"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txt_weather_desc"
-            android:textSize="40sp"
+            android:textSize="@dimen/weather_desc_size"
             android:textColor="@android:color/white"
             app:fontFamily="sans-serif-light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_weather"
             app:layout_constraintStart_toStartOf="@+id/txt_weather"
-            app:layout_constraintHorizontal_bias="0.0" android:layout_marginRight="8dp" android:layout_marginEnd="8dp"
+            app:layout_constraintHorizontal_bias="0.0" android:layout_marginRight="@dimen/weather_desc_margin"
+            android:layout_marginEnd="@dimen/weather_desc_margin"
     />
     <TextView
-            android:text="TextView"
+            tools:text="@string/istanbul"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/txt_city"
             app:layout_constraintTop_toTopOf="@+id/imageView" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView" android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
+            app:layout_constraintStart_toEndOf="@+id/imageView" android:layout_marginLeft="@dimen/location_name_margin"
+            android:layout_marginStart="@dimen/location_name_margin"
+            android:layout_marginRight="@dimen/location_name_margin"
+            android:layout_marginEnd="@dimen/location_name_margin"
+            android:layout_marginBottom="@dimen/location_name_margin"
             app:layout_constraintHorizontal_bias="0.0"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView" android:layout_marginTop="8dp"
-            android:textColor="#FFFFFF"/>
+            android:textSize="@dimen/location_name_size"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView"
+            android:layout_marginTop="@dimen/location_name_margin"
+            android:textColor="@android:color/white"/>
     <ImageView
-            android:layout_height="24dp" tools:srcCompat="@tools:sample/avatars"
+            android:layout_height="@dimen/location_icon_size"
+            tools:srcCompat="@tools:sample/avatars"
             android:id="@+id/imageView"
             app:srcCompat="@drawable/ic_location_on_black_24dp"
-            android:layout_width="24dp" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="36dp" app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginBottom="8dp" app:layout_constraintBottom_toTopOf="@+id/img_weather"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
+            android:layout_width="@dimen/location_icon_size" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="@dimen/location_icon_top_margin" app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginBottom="@dimen/location_icon_bottom_margin"
+            app:layout_constraintBottom_toTopOf="@+id/img_weather"
+            android:layout_marginLeft="@dimen/location_icon_left_right_margin"
+            android:layout_marginStart="@dimen/location_icon_left_right_margin"
+            android:layout_marginRight="@dimen/location_icon_left_right_margin"
+            android:layout_marginEnd="@dimen/location_icon_left_right_margin"
             app:layout_constraintVertical_bias="0.0"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>
