@@ -1,5 +1,6 @@
-package com.cansuaktas.weatherapp.ui.main.presenter
+package com.cansuaktas.weatherapp.ui.main.presenter.retrofitconnection
 
+import com.cansuaktas.weatherapp.application.App
 import com.cansuaktas.weatherapp.client.RetrofitClient
 import com.cansuaktas.weatherapp.enums.UrlParameters
 import com.cansuaktas.weatherapp.network.WeatherService
@@ -9,6 +10,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class RetrofitConnection(cityName: String, val iRetrofitConnection: IRetrofitConnection) {
+
 
     init {
 
@@ -22,7 +24,7 @@ class RetrofitConnection(cityName: String, val iRetrofitConnection: IRetrofitCon
             .getWeatherData(
                 UrlParameters.VERSION.toString(),
                 cityName.trim(),
-                UrlParameters.APP_ID.toString()
+                App.getInstance().getApiKey(1)
             )
             .enqueue(object : Callback<WeatherResponse> {
 

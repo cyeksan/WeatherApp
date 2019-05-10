@@ -1,4 +1,4 @@
-package com.cansuaktas.weatherapp.ui.main.presenter
+package com.cansuaktas.weatherapp.ui.main.presenter.getlocation
 
 import android.annotation.SuppressLint
 import android.content.Context

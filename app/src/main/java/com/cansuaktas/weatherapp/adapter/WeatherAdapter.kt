@@ -14,7 +14,7 @@ import com.cansuaktas.weatherapp.model.WeatherModel
 import java.text.SimpleDateFormat
 import java.util.*
 
-class WeatherAdapter(val weatherList: ArrayList<WeatherModel>, val isDetailActivity: Boolean) :
+class WeatherAdapter(val weatherList: ArrayList<WeatherModel>) :
     androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder>() {
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {
 
@@ -49,14 +49,13 @@ class WeatherAdapter(val weatherList: ArrayList<WeatherModel>, val isDetailActiv
             tvDegree.text = "${weatherList[position].degree?.addDegreeSign()}"
             Glide.with(context).load(weatherList[position].weatherUrl).into(ivWeather)
 
-            if (isDetailActivity && formattedDate != weatherList[position].today && weatherList[position].today != null) {
+            if (formattedDate != weatherList[position].today && weatherList[position].today != null) {
 
                 setTextItemColor(Color.LTGRAY, 0.5f)
             } else {
 
-                setTextItemColor(Color.DKGRAY, 1.5f)
+                setTextItemColor(Color.DKGRAY, 1.0f)
             }
-
         }
 
         private fun setTextItemColor(color: Int, alphaValue: Float) {

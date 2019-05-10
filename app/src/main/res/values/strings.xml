@@ -5,4 +5,6 @@
     <string name="weather_degree">26°</string>
     <string name="clouds">Clouds</string>
     <string name="istanbul">Istanbul</string>
+    <string name="time_dummy_text">04:00 PM</string>
+    <string name="degree_dummy_text">18°</string>
 </resources>

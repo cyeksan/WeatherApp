@@ -15,4 +15,14 @@
     <dimen name="location_icon_left_right_margin">16dp</dimen>
     <dimen name="location_icon_top_margin">36dp</dimen>
     <dimen name="location_icon_bottom_margin">8dp</dimen>
+    <dimen name="final_text_size">12sp</dimen>
+    <dimen name="final_image_size">4dp</dimen>
+    <dimen name="final_fab_top_margin">8dp</dimen>
+    <dimen name="time_item_size">24sp</dimen>
+    <dimen name="time_item_left_margin">24dp</dimen>
+    <dimen name="time_item_top_bottom_margin">8dp</dimen>
+    <dimen name="degree_item_size">28sp</dimen>
+    <dimen name="degree_item_margin">16dp</dimen>
+    <dimen name="forecast_icon_item_size">56dp</dimen>
+    <dimen name="degree_item_right_margin">24dp</dimen>
 </resources>

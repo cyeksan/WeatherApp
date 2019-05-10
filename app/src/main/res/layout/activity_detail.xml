@@ -2,33 +2,93 @@
 
 <androidx.constraintlayout.motion.widget.MotionLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/motionLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutDescription="@xml/motion_scene">
+        android:layout_height="match_parent">
+
+    <TextView
+            tools:text="@string/istanbul"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_city"
+            android:alpha="0"
+            app:layout_constraintEnd_toStartOf="@+id/txt_weather"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintBottom_toBottomOf="@+id/img_weather"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintVertical_bias="0.0" app:layout_constraintTop_toTopOf="@+id/img_weather"/>
+    <ImageView
+            android:layout_height="@dimen/final_image_size"
+            android:id="@+id/imageView"
+            android:layout_width="@dimen/final_image_size"
+            android:visibility="gone"
+            android:alpha="0" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintVertical_bias="0.0"/>
+
+    <ImageView
+            android:layout_width="@dimen/final_image_size"
+            android:layout_height="@dimen/final_image_size"
+            android:id="@+id/img_weather"
+            android:scaleType="fitCenter"
+            app:layout_constraintTop_toTopOf="@+id/img_background"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0" android:alpha="0"/>
+    <TextView
+            tools:text="@string/weather_degree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_weather"
+            android:gravity="center"
+            app:fontFamily="sans-serif-light"
+            app:layout_constraintStart_toEndOf="@+id/img_weather"
+            app:layout_constraintTop_toTopOf="@+id/img_weather" android:textColor="@android:color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintBottom_toTopOf="@+id/recyclerView" android:alpha="0"
+    />
+    <TextView
+            tools:text="@string/clouds"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_weather_desc"
+            android:textColor="@android:color/white"
+            app:fontFamily="sans-serif-light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_weather"
+            app:layout_constraintStart_toStartOf="@+id/txt_weather"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintBottom_toTopOf="parent" android:alpha="0"
+    />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="@dimen/fab_size"
             android:layout_height="@dimen/fab_size"
-            android:clickable="true"
-            android:visibility="gone"
-            android:focusable="true"
             android:id="@+id/fab"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/recyclerView"
-            app:layout_constraintHorizontal_bias="0.5"
+            android:visibility="invisible"
             app:backgroundTint="@color/fabColor"
             app:elevation="@dimen/elevation_size"
-            app:srcCompat="@drawable/ic_keyboard_arrow_up_white_24dp"
             app:fabCustomSize="@dimen/fab_size"
-            app:layout_constraintBottom_toTopOf="@+id/recyclerView"/>
-    <androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-                                               android:layout_marginTop="@dimen/top_margin"
-                                               android:layout_marginBottom="@dimen/top_margin"
-                                               android:id="@+id/recyclerView"
-                                               android:layout_width="match_parent"
-                                               android:layout_height="wrap_content">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/recyclerView" app:layout_constraintVertical_bias="0.0"
+            android:layout_marginTop="@dimen/final_fab_top_margin"/>
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintVertical_bias="0.0">
 
     </androidx.recyclerview.widget.RecyclerView>
 </androidx.constraintlayout.motion.widget.MotionLayout>

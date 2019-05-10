@@ -1,40 +1,38 @@
 package com.cansuaktas.weatherapp.ui.main.view
 
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.Window
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.cansuaktas.weatherapp.R
 import com.cansuaktas.weatherapp.adapter.WeatherAdapter
-import com.cansuaktas.weatherapp.enums.IntentParameters
 import com.cansuaktas.weatherapp.enums.WeatherType
-import com.cansuaktas.weatherapp.helper.SlideHalfScreen
 import com.cansuaktas.weatherapp.model.WeatherModel
-import com.cansuaktas.weatherapp.ui.detail.view.DetailActivity
 import com.cansuaktas.weatherapp.ui.main.model.response.WeatherResponse
-import com.cansuaktas.weatherapp.ui.main.presenter.GetLocation
-import com.cansuaktas.weatherapp.ui.main.presenter.IGetLocation
-import com.cansuaktas.weatherapp.ui.main.presenter.IRetrofitConnection
-import com.cansuaktas.weatherapp.ui.main.presenter.RetrofitConnection
+import com.cansuaktas.weatherapp.ui.main.presenter.getlocation.GetLocation
+import com.cansuaktas.weatherapp.ui.main.presenter.getlocation.IGetLocation
+import com.cansuaktas.weatherapp.ui.main.presenter.retrofitconnection.IRetrofitConnection
+import com.cansuaktas.weatherapp.ui.main.presenter.retrofitconnection.RetrofitConnection
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.IOException
 import java.text.DecimalFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class MainActivity : SlideHalfScreen(), IRetrofitConnection, IGetLocation {
+class MainActivity : AppCompatActivity(), IRetrofitConnection, IGetLocation {
 
     private var cityName: String? = null
-    private val list = ArrayList<WeatherModel>()
-    private val weatherList: MutableList<WeatherModel> = ArrayList()
+    private val LIST_START_INDEX = 2
+    private val LIST_FINAL_INDEX = 27
+    private val MAX_ADDRESS_RESULT = 10
+    private val weatherList: ArrayList<WeatherModel> = ArrayList<WeatherModel>()
     private val PERMISSION_REQUEST_CODE = 1000
     private val permissions =
         arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -53,16 +51,6 @@ class MainActivity : SlideHalfScreen(), IRetrofitConnection, IGetLocation {
 
         checkPermissionGrantedAndGetLocation()
 
-        fab.setOnClickListener {
-            slideToHalf(motionLayout)
-            val intent = Intent(this@MainActivity, DetailActivity::class.java)
-            intent.putExtra(IntentParameters.CITY_NAME.toString(), cityName)
-            intent.putParcelableArrayListExtra(
-                IntentParameters.WEATHER_LIST.toString(),
-                weatherList as java.util.ArrayList<out Parcelable>
-            )
-            startActivity(intent)
-        }
 
     }
 
@@ -164,7 +152,7 @@ class MainActivity : SlideHalfScreen(), IRetrofitConnection, IGetLocation {
         val addresses: List<Address>
 
         try {
-            addresses = geocoder.getFromLocation(lat, lng, 10)
+            addresses = geocoder.getFromLocation(lat, lng, MAX_ADDRESS_RESULT)
 
             if (addresses.isNotEmpty()) {
 
@@ -230,21 +218,19 @@ class MainActivity : SlideHalfScreen(), IRetrofitConnection, IGetLocation {
 
     override fun weatherRequest(responseModel: WeatherResponse) {
 
-
-        createList(weatherList, responseModel, 2, 27)
-        createList(list, responseModel, 2, 5)
+        createList(weatherList, responseModel, LIST_START_INDEX, LIST_FINAL_INDEX)
 
         recyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(
             this@MainActivity,
             androidx.recyclerview.widget.RecyclerView.VERTICAL,
             false
         )
-        recyclerView.adapter = WeatherAdapter(list, false)
+        recyclerView.adapter = WeatherAdapter(weatherList)
 
-        txt_weather_desc.text = responseModel.list[2].weather[0].main
-        txt_weather.text = responseModel.list[2].main.temp.toCelsius().formatDouble().addDegreeSign()
+        txt_weather_desc.text = responseModel.list[LIST_START_INDEX].weather[0].main
+        txt_weather.text = responseModel.list[LIST_START_INDEX].main.temp.toCelsius().formatDouble().addDegreeSign()
 
-        setBackgroundImage(responseModel.list[2].weather[0].main)
+        setBackgroundImage(responseModel.list[LIST_START_INDEX].weather[0].main)
     }
 
     override fun getLongitudeAndLatitude(latitude: Double?, longitude: Double?) {

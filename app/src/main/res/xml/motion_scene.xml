@@ -5,12 +5,12 @@
     <Transition
             motion:constraintSetStart="@layout/activity_main"
             motion:constraintSetEnd="@layout/activity_detail"
-            motion:autoTransition="jumpToStart"
             motion:duration="1000">
 
         <OnSwipe
-                motion:touchAnchorId="@id/fab"
+                motion:touchAnchorId="@id/recyclerView"
                 motion:touchAnchorSide="top"
+                motion:moveWhenScrollAtTop="true"
                 motion:dragDirection="dragUp"/>
 
     </Transition>
