@@ -1,6 +1,6 @@
 # WeatherApp
 
-Android app that displays weather data based on the location. OpenWeather API has been used as the data source. 
+Android app that displays hourly weather data in a day based on the location. OpenWeather API has been used as the data source. 
 
 * MVP
 * Retrofit
